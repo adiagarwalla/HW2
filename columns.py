@@ -43,6 +43,22 @@ def read_sample_nonNan():
     clf.fit(np.array(X, 'float_'), np.array(Y, 'float_'))
     print clf.coef_
 
+    Y_test = []
+
+    with open(file_test) as f_test:
+    	for k, line_test in enumerate(f_test, 1):
+    		test_sample = line_test.strip().split()
+    		if (test_sample[5] == '0'):
+    			Y_test.append(test_sample[5])
+
+    # The mean square error
+    print("Residual sum of squares: %.2f"
+      % np.mean((clf.predict(np.array(X, 'float_')) - np.array(Y_test, 'float_')) ** 2))
+
+    # The root mean square error
+    print("Residual root sum of squares: %.2f"
+      % math.sqrt(np.mean((clf.predict(np.array(X, 'float_')) - np.array(Y_test, 'float_')) ** 2)))
+
 def main():
     read_sample_nonNan()
 
