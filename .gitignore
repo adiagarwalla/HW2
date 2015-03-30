@@ -1,0 +1,12 @@
+# Genomic data
+intersected_final*
+
+# Virtualenv (for Collin)
+bin
+lib
+include
+.Python
+
+# Files
+.DS_Store
+*.swp
