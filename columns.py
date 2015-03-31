@@ -85,6 +85,29 @@ def read_sample_nonNan():
     # The root mean square error
     print("Residual root sum of squares: %.5f" % math.sqrt(rss))
 
+    # Ridge
+    clf_ridge = linear_model.Ridge (alpha = .5)
+    clf_ridge.fit(np.array(X_train, 'float_'), np.array(Y, 'float_'))
+    print clf_ridge.coef_
+
+    # The mean square error
+    rss_ridge = np.mean((clf_ridge.predict(np.array(X_test_final, 'float_')) - np.array(Y_test_final, 'float_')) ** 2)
+    print("Residual sum of squares (Ridge): %.5f" % rss_ridge)
+
+    # The root mean square error
+    print("Residual root sum of squares (Ridge): %.5f" % math.sqrt(rss_ridge))
+
+    # Lasso
+    clf_lasso = linear_model.Lasso (alpha = .1)
+    clf_lasso.fit(np.array(X_train, 'float_'), np.array(Y, 'float_'))
+    
+    # The mean square error
+    rss_lasso = np.mean((clf_lasso.predict(np.array(X_test_final, 'float_')) - np.array(Y_test_final, 'float_')) ** 2)
+    print("Residual sum of squares (Lasso): %.5f" % rss_lasso)
+
+    # The root mean square error
+    print("Residual root sum of squares (Lasso): %.5f" % math.sqrt(rss_lasso))
+
 def main():
     read_sample_nonNan()
 
