@@ -1,6 +1,7 @@
 import math
 import linecache
 import numpy as np
+from operator import itemgetter
 from sklearn import linear_model
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -9,6 +10,48 @@ file_sample = "data/intersected_final_chr1_cutoff_20_sample.bed"
 file_test = "data/intersected_final_chr1_cutoff_20_test.bed"
 file_train = "data/intersected_final_chr1_cutoff_20_train_revised.bed"
 file_bed = "data/intersected_final_chr1_cutoff_20.bed"
+
+def knn(n):
+    print "Starting KNN calculation with n=%d" % n
+
+    f_train = open(file_train)
+    X_train = []
+    Y = []
+    with open(file_sample) as f:
+        for i, line in enumerate(f, 1):
+            sample = line.strip().split()
+            if sample[4] != 'nan':
+                Y.append(sample[4])
+                row = linecache.getline(file_train, i).strip().split()
+                train_data = row[4: -1]
+                neighbors = []
+                total = 0
+                count = 0
+                for j in train_data:
+                    if j != 'nan':
+                        total = total + float(j)
+                        count = count + 1
+                avg = total / float(count)
+                train_data2 = []
+                for j in train_data:
+                    if j == 'nan':
+                        train_data2.append(avg)
+                    else:
+                        train_data2.append(float(j))
+                for d in train_data2:
+                    diff = ((float(sample[4]) - float(d)) ** 2)
+                    if len(neighbors < n):
+                        neighbors.append((d, diff))
+                    else:
+                        sorted(neighbors, key=itemgetter(1), reverse=True)
+                        if diff < neighbors[0][1]:
+                            neighbors = neighbors[1:]
+                            neighbors.append((d, diff))
+                n_closest = []
+                for pair in neighbors:
+                    n_closest.append(pair[0])
+                X_train.append(n_closest)
+            elif
 
 # Get non-NAN sites from sample file
 def read_sample_nonNan():
@@ -145,6 +188,7 @@ def read_sample_nonNan():
     print("Residual root sum of squares (Random Forest): %.5f" % math.sqrt(rss_forest))
 
 def main():
-    read_sample_nonNan()
+    # read_sample_nonNan()
+    knn(5)
 
 main()
