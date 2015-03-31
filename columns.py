@@ -108,6 +108,17 @@ def read_sample_nonNan():
     # The root mean square error
     print("Residual root sum of squares (Lasso): %.5f" % math.sqrt(rss_lasso))
 
+    # Bayesian Ridge Regression
+    clf_bayes = linear_model.BayesianRidge()
+    clf_bayes.fit(np.array(X_train, 'float_'), np.array(Y, 'float_'))
+    
+    # The mean square error
+    rss_bayes = np.mean((clf_bayes.predict(np.array(X_test_final, 'float_')) - np.array(Y_test_final, 'float_')) ** 2)
+    print("Residual sum of squares (Bayes): %.5f" % rss_bayes)
+
+    # The root mean square error
+    print("Residual root sum of squares (Bayes): %.5f" % math.sqrt(rss_bayes))    
+
 def main():
     read_sample_nonNan()
 
