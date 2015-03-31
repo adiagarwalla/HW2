@@ -2,6 +2,8 @@ import math
 import linecache
 import numpy as np
 from sklearn import linear_model
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 
 file_sample = "data/intersected_final_chr1_cutoff_20_sample.bed"
 file_test = "data/intersected_final_chr1_cutoff_20_test.bed"
@@ -117,7 +119,30 @@ def read_sample_nonNan():
     print("Residual sum of squares (Bayes): %.5f" % rss_bayes)
 
     # The root mean square error
-    print("Residual root sum of squares (Bayes): %.5f" % math.sqrt(rss_bayes))    
+    print("Residual root sum of squares (Bayes): %.5f" % math.sqrt(rss_bayes))   
+
+    # Decision Tree Regressor
+    clf_decision = DecisionTreeRegressor(max_depth=2)
+    clf_decision.fit(np.array(X_train, 'float_'), np.array(Y, 'float_'))
+    
+    # The mean square error
+    rss_decision = np.mean((clf_decision.predict(np.array(X_test_final, 'float_')) - np.array(Y_test_final, 'float_')) ** 2)
+    print("Residual sum of squares (Decision): %.5f" % rss_decision)
+
+    # The root mean square error
+    print("Residual root sum of squares (Decision): %.5f" % math.sqrt(rss_decision))
+
+    # Random Forest Regressor
+    num_trees = 100
+    clf_forest = RandomForestRegressor(n_estimators = num_trees)
+    clf_forest.fit(np.array(X_train, 'float_'), np.array(Y, 'float_'))
+    
+    # The mean square error
+    rss_forest = np.mean((clf_forest.predict(np.array(X_test_final, 'float_')) - np.array(Y_test_final, 'float_')) ** 2)
+    print("Residual sum of squares (Random Forest): %.5f" % rss_forest)
+
+    # The root mean square error
+    print("Residual root sum of squares (Random Forest): %.5f" % math.sqrt(rss_forest))
 
 def main():
     read_sample_nonNan()
